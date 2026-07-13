@@ -58,7 +58,7 @@ export function Navbar({ navLinks, logo, siteName }: NavbarProps) {
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3">
             <img src={logo} alt={siteName} className="h-12 w-auto" />
-            <span className={cn("hidden md:block font-serif text-xl font-bold", scrolled ? "text-primary" : "text-white")}>
+            <span className="hidden md:block font-serif text-xl font-bold text-white">
               {siteName}
             </span>
           </Link>
@@ -67,7 +67,7 @@ export function Navbar({ navLinks, logo, siteName }: NavbarProps) {
             <NavigationMenu>
               <NavigationMenuList>
                 {navLinks.map((link) => (
-                  <DesktopNavItem key={link.href} link={link} isActive={isActive(link.href)} scrolled={scrolled} />
+                  <DesktopNavItem key={link.href} link={link} isActive={isActive(link.href)} />
                 ))}
               </NavigationMenuList>
               <NavigationMenuViewport />
@@ -82,7 +82,7 @@ export function Navbar({ navLinks, logo, siteName }: NavbarProps) {
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" aria-label="Menu" className={cn(scrolled ? "text-neutral-700" : "text-white")}>
+              <Button variant="ghost" size="icon" aria-label="Menu" className="text-white">
                 {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
             </SheetTrigger>
@@ -110,7 +110,7 @@ export function Navbar({ navLinks, logo, siteName }: NavbarProps) {
   );
 }
 
-function DesktopNavItem({ link, isActive, scrolled }: { link: NavLink; isActive: boolean; scrolled: boolean }) {
+function DesktopNavItem({ link, isActive }: { link: NavLink; isActive: boolean }) {
   const [open, setOpen] = useState(false);
 
   if (link.children && link.children.length > 0) {
@@ -123,13 +123,9 @@ function DesktopNavItem({ link, isActive, scrolled }: { link: NavLink; isActive:
         <button
           className={cn(
             "flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors rounded-md",
-            scrolled
-              ? isActive
-                ? "text-primary bg-primary/5"
-                : "text-neutral-700 hover:text-primary hover:bg-neutral-50"
-              : isActive
-                ? "text-white bg-white/20"
-                : "text-white/90 hover:text-white hover:bg-white/10"
+            isActive
+              ? "text-white bg-white/20"
+              : "text-white/90 hover:text-white hover:bg-white/10"
           )}
         >
           {link.label}
@@ -164,13 +160,9 @@ function DesktopNavItem({ link, isActive, scrolled }: { link: NavLink; isActive:
       to={link.href}
       className={cn(
         "px-4 py-2 text-sm font-medium transition-colors rounded-md",
-        scrolled
-          ? isActive
-            ? "text-primary bg-primary/5"
-            : "text-neutral-700 hover:text-primary hover:bg-neutral-50"
-          : isActive
-            ? "text-white bg-white/20"
-            : "text-white/90 hover:text-white hover:bg-white/10"
+        isActive
+          ? "text-white bg-white/20"
+          : "text-white/90 hover:text-white hover:bg-white/10"
       )}
     >
       {link.label}
