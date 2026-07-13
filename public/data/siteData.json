@@ -1,0 +1,815 @@
+{
+  "association": {
+    "name": "Diplomatic Bond and Duty Free Shop Owners Association of Bangladesh",
+    "shortName": "DBDFSOAB",
+    "tagline": "Uniting Bond and Duty Free Shop Owners Across Bangladesh",
+    "description": "The Diplomatic Bond and Duty Free Shop Owners Association of Bangladesh (DBDFSOAB) is the premier representative body for diplomatic bond and duty-free shop owners across the nation. Established to protect and promote the interests of its members, DBDFSOAB serves as a unified voice in policy advocacy, regulatory compliance, and industry development.",
+    "established": "2010",
+    "registrationNumber": "REG-2010-DHA-0042",
+    "logo": "/images/dbdfsoab-logo-new.png",
+    "favicon": "/favicon.ico"
+  },
+  "navigation": [
+    {
+      "label": "Home",
+      "href": "/"
+    },
+    {
+      "label": "About",
+      "href": "/about"
+    },
+    {
+      "label": "Committee",
+      "href": "/committee"
+    },
+    {
+      "label": "Members",
+      "href": "/members"
+    },
+    {
+      "label": "Activities",
+      "href": "/activities"
+    },
+    {
+      "label": "Gallery",
+      "href": "/gallery"
+    },
+    {
+      "label": "Documents",
+      "href": "/documents"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact"
+    }
+  ],
+  "home": {
+    "hero": {
+      "title": "Diplomatic Bond and Duty Free Shop Owners Association of Bangladesh",
+      "subtitle": "DBDFSOAB",
+      "description": "Empowering bond and duty-free shop owners through unity, advocacy, and excellence in service since 2010.",
+      "image": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+      "ctaText": "Learn More About Us",
+      "ctaLink": "/about"
+    },
+    "welcomeMessage": {
+      "title": "Welcome to DBDFSOAB",
+      "content": "On behalf of the Diplomatic Bond and Duty Free Shop Owners Association of Bangladesh, I extend a warm welcome to you. Our association stands as a beacon of unity and progress for all bond and duty-free shop owners in Bangladesh. Together, we strive to create a favorable business environment, advocate for fair policies, and uphold the highest standards of service and integrity in our industry.",
+      "authorName": "Md. Rahman",
+      "authorPosition": "President, DBDFSOAB",
+      "authorImage": "https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+    },
+    "aboutPreview": {
+      "title": "About Our Association",
+      "content": "DBDFSOAB was founded with a vision to unify and empower diplomatic bond and duty-free shop owners across Bangladesh. Over the years, we have grown into a robust organization representing hundreds of member companies, advocating for regulatory reforms, and fostering professional growth within the industry.",
+      "image": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+      "linkText": "Read More",
+      "linkHref": "/about"
+    },
+    "objectives": [
+      {
+        "title": "Advocacy",
+        "description": "Represent members' interests with government bodies and regulatory authorities to shape favorable policies.",
+        "icon": "Scale"
+      },
+      {
+        "title": "Networking",
+        "description": "Create opportunities for members to connect, collaborate, and grow their businesses together.",
+        "icon": "Users"
+      },
+      {
+        "title": "Compliance",
+        "description": "Ensure members adhere to the highest standards of regulatory compliance and ethical business practices.",
+        "icon": "ShieldCheck"
+      },
+      {
+        "title": "Development",
+        "description": "Promote skill development, training programs, and knowledge sharing among industry professionals.",
+        "icon": "TrendingUp"
+      }
+    ],
+    "statistics": [
+      {
+        "label": "Member Companies",
+        "value": "150+",
+        "icon": "Building2"
+      },
+      {
+        "label": "Years of Service",
+        "value": "15+",
+        "icon": "Calendar"
+      },
+      {
+        "label": "Annual Events",
+        "value": "20+",
+        "icon": "CalendarDays"
+      },
+      {
+        "label": "Team Members",
+        "value": "12",
+        "icon": "Users"
+      }
+    ],
+    "executiveCommitteePreview": {
+      "title": "Executive Committee",
+      "viewAllLink": "/committee",
+      "members": [
+        {
+          "id": "1",
+          "name": "Md. Rahman",
+          "position": "President",
+          "company": "Rahman Bond Shop",
+          "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+          "biography": "With over 20 years of experience in the diplomatic bond and duty-free industry, Md. Rahman leads the association with vision and dedication.",
+          "order": 1
+        },
+        {
+          "id": "2",
+          "name": "Fatima Akter",
+          "position": "General Secretary",
+          "company": "Akter Enterprises",
+          "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+          "biography": "Fatima Akter brings strong organizational skills and strategic thinking to her role as General Secretary.",
+          "order": 2
+        },
+        {
+          "id": "3",
+          "name": "Karim Uddin",
+          "position": "Vice President",
+          "company": "Karim Traders",
+          "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+          "biography": "Karim Uddin has been instrumental in expanding the association's reach across Bangladesh.",
+          "order": 3
+        }
+      ]
+    },
+    "activitiesPreview": {
+      "title": "Recent Activities",
+      "viewAllLink": "/activities",
+      "activities": [
+        {
+          "id": "1",
+          "title": "Annual General Meeting 2024",
+          "description": "The Annual General Meeting brought together over 100 member companies to discuss the year's achievements and future plans.",
+          "date": "2024-12-15",
+          "location": "Dhaka Club, Dhaka",
+          "images": [
+            "https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+          ],
+          "category": "Meeting",
+          "featured": true
+        },
+        {
+          "id": "2",
+          "title": "Industry Workshop on Compliance",
+          "description": "A comprehensive workshop on regulatory compliance and documentation requirements for duty-free operations.",
+          "date": "2024-11-20",
+          "location": "Hotel Intercontinental, Dhaka",
+          "images": [
+            "https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+          ],
+          "category": "Workshop",
+          "featured": true
+        }
+      ]
+    },
+    "galleryPreview": {
+      "title": "Gallery",
+      "viewAllLink": "/gallery",
+      "images": [
+        {
+          "id": "1",
+          "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+          "alt": "Annual General Meeting",
+          "caption": "AGM 2024",
+          "category": "Events",
+          "width": 800,
+          "height": 600
+        },
+        {
+          "id": "2",
+          "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+          "alt": "Workshop Session",
+          "caption": "Compliance Workshop",
+          "category": "Events",
+          "width": 800,
+          "height": 600
+        },
+        {
+          "id": "3",
+          "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+          "alt": "Award Ceremony",
+          "caption": "Award Night",
+          "category": "Events",
+          "width": 800,
+          "height": 600
+        },
+        {
+          "id": "4",
+          "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+          "alt": "Networking Event",
+          "caption": "Networking",
+          "category": "Events",
+          "width": 800,
+          "height": 600
+        }
+      ]
+    },
+    "cta": {
+      "title": "Become a Member",
+      "description": "Join DBDFSOAB and unlock a world of opportunities for your business. Network with industry leaders, stay updated on regulations, and grow with us.",
+      "buttonText": "Contact Us",
+      "buttonLink": "/contact"
+    },
+    "contactPreview": {
+      "title": "Get In Touch",
+      "address": "123 Motijheel, Dhaka 1000, Bangladesh",
+      "phone": "+880 2-1234567",
+      "email": "info@dbdfsoab.org",
+      "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.9026!2d90.4124!3d23.8103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDQxJzA4LjQiTiA5MMKwMTMnMTguMyJF!5e0!3m2!1sen!2sbd!4v1234567890"
+    }
+  },
+  "about": {
+    "history": {
+      "title": "Our History",
+      "content": "DBDFSOAB was established in 2010 to address the unique challenges faced by diplomatic bond and duty-free shop owners in Bangladesh. What started as a small group of dedicated professionals has evolved into the leading industry association, representing over 150 member companies across the country.",
+      "timeline": [
+        {
+          "year": "2010",
+          "title": "Foundation",
+          "description": "DBDFSOAB was officially registered with the Ministry of Commerce."
+        },
+        {
+          "year": "2013",
+          "title": "First Policy Victory",
+          "description": "Successfully advocated for reduced customs processing times for duty-free operations."
+        },
+        {
+          "year": "2017",
+          "title": "Membership Expansion",
+          "description": "Crossed 100 member companies milestone."
+        },
+        {
+          "year": "2021",
+          "title": "Digital Transformation",
+          "description": "Launched digital membership management and event platforms."
+        },
+        {
+          "year": "2024",
+          "title": "Industry Leadership",
+          "description": "Became the primary industry partner with Bangladesh Customs and Ministry of Commerce."
+        }
+      ]
+    },
+    "mission": {
+      "title": "Our Mission",
+      "content": "To represent, protect, and promote the interests of diplomatic bond and duty-free shop owners in Bangladesh through effective advocacy, professional development, and collaborative partnerships."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "content": "To be the leading industry association that shapes a transparent, competitive, and globally recognized duty-free retail sector in Bangladesh."
+    },
+    "objectives": [
+      {
+        "title": "Policy Advocacy",
+        "description": "Engage with government bodies to develop favorable regulatory frameworks.",
+        "icon": "Scale"
+      },
+      {
+        "title": "Member Support",
+        "description": "Provide legal, technical, and operational support to all members.",
+        "icon": "HandHeart"
+      },
+      {
+        "title": "Industry Standards",
+        "description": "Maintain and elevate ethical and operational standards across the sector.",
+        "icon": "Award"
+      },
+      {
+        "title": "Knowledge Sharing",
+        "description": "Facilitate workshops, seminars, and training programs.",
+        "icon": "GraduationCap"
+      },
+      {
+        "title": "Networking",
+        "description": "Build a strong community of professionals for collaboration.",
+        "icon": "Network"
+      },
+      {
+        "title": "Global Outreach",
+        "description": "Connect members with international duty-free networks and opportunities.",
+        "icon": "Globe"
+      }
+    ],
+    "coreValues": [
+      {
+        "title": "Integrity",
+        "description": "We uphold the highest ethical standards in all our dealings.",
+        "icon": "ShieldCheck"
+      },
+      {
+        "title": "Excellence",
+        "description": "We strive for continuous improvement in everything we do.",
+        "icon": "Trophy"
+      },
+      {
+        "title": "Unity",
+        "description": "We believe in the strength of collective action and solidarity.",
+        "icon": "Users"
+      },
+      {
+        "title": "Transparency",
+        "description": "We operate with openness and accountability.",
+        "icon": "Eye"
+      },
+      {
+        "title": "Innovation",
+        "description": "We embrace change and encourage forward-thinking solutions.",
+        "icon": "Lightbulb"
+      }
+    ]
+  },
+  "committee": {
+    "title": "Executive Committee",
+    "subtitle": "Meet the dedicated leaders steering DBDFSOAB towards excellence",
+    "members": [
+      {
+        "id": "1",
+        "name": "Md. Rahman",
+        "position": "President",
+        "company": "Rahman Bond Shop",
+        "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "biography": "With over 25 years of experience in the diplomatic bond and duty-free industry, Md. Rahman leads the association with vision and dedication. He has been instrumental in shaping key industry policies and fostering strong government relations.",
+        "email": "president@dbdfsoab.org",
+        "phone": "+880 1711-000001",
+        "order": 1
+      },
+      {
+        "id": "2",
+        "name": "Fatima Akter",
+        "position": "General Secretary",
+        "company": "Akter Enterprises",
+        "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "biography": "Fatima Akter brings strong organizational skills and strategic thinking to her role as General Secretary. She coordinates all association activities and ensures smooth day-to-day operations.",
+        "email": "secretary@dbdfsoab.org",
+        "phone": "+880 1711-000002",
+        "order": 2
+      },
+      {
+        "id": "3",
+        "name": "Karim Uddin",
+        "position": "Vice President",
+        "company": "Karim Traders",
+        "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "biography": "Karim Uddin has been instrumental in expanding the association's reach across Bangladesh. He oversees membership growth and regional chapter development.",
+        "email": "vp@dbdfsoab.org",
+        "phone": "+880 1711-000003",
+        "order": 3
+      },
+      {
+        "id": "4",
+        "name": "Nasreen Sultana",
+        "position": "Treasurer",
+        "company": "Sultana Duty Free",
+        "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "biography": "Nasreen Sultana manages the association's finances with precision and transparency. Her expertise ensures sustainable growth and fiscal responsibility.",
+        "email": "treasurer@dbdfsoab.org",
+        "phone": "+880 1711-000004",
+        "order": 4
+      },
+      {
+        "id": "5",
+        "name": "Ahmed Hossain",
+        "position": "Organizing Secretary",
+        "company": "Hossain & Co.",
+        "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "biography": "Ahmed Hossain plans and executes all association events, meetings, and training programs with meticulous attention to detail.",
+        "email": "organizing@dbdfsoab.org",
+        "phone": "+880 1711-000005",
+        "order": 5
+      },
+      {
+        "id": "6",
+        "name": "Rashida Begum",
+        "position": "Joint Secretary",
+        "company": "Begum Imports",
+        "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "biography": "Rashida Begum supports the General Secretary in managing association operations and member communications.",
+        "email": "jointsec@dbdfsoab.org",
+        "phone": "+880 1711-000006",
+        "order": 6
+      },
+      {
+        "id": "7",
+        "name": "Imran Khan",
+        "position": "Public Relations Officer",
+        "company": "Khan Marketing",
+        "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "biography": "Imran Khan manages the association's public image, media relations, and external communications strategy.",
+        "email": "pro@dbdfsoab.org",
+        "phone": "+880 1711-000007",
+        "order": 7
+      },
+      {
+        "id": "8",
+        "name": "Selina Chowdhury",
+        "position": "Legal Advisor",
+        "company": "Chowdhury & Associates",
+        "photo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "biography": "Selina Chowdhury provides expert legal counsel to the association and its members on regulatory matters.",
+        "email": "legal@dbdfsoab.org",
+        "phone": "+880 1711-000008",
+        "order": 8
+      }
+    ]
+  },
+  "members": {
+    "title": "Our Members",
+    "subtitle": "Proudly serving over 150 member companies across Bangladesh",
+    "members": [
+      {
+        "id": "1",
+        "name": "Rahman Bond Shop",
+        "logo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "representative": "Md. Rahman",
+        "address": "45 Motijheel, Dhaka 1000",
+        "description": "Leading importer of premium diplomatic bonds and duty-free products serving embassies and international organizations.",
+        "phone": "+880 2-123456",
+        "email": "info@rahmanbond.com",
+        "order": 1
+      },
+      {
+        "id": "2",
+        "name": "Akter Enterprises",
+        "logo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "representative": "Fatima Akter",
+        "address": "78 Gulshan Avenue, Dhaka 1212",
+        "description": "Full-service duty-free retailer with a diverse portfolio of luxury goods, electronics, and consumer products.",
+        "phone": "+880 2-654321",
+        "email": "info@akterenterprises.com",
+        "order": 2
+      },
+      {
+        "id": "3",
+        "name": "Karim Traders",
+        "logo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "representative": "Karim Uddin",
+        "address": "23 Chittagong Port Area, Chittagong",
+        "description": "Established trader with strong ties to international suppliers and a reputation for reliability and quality.",
+        "phone": "+880 31-123456",
+        "email": "info@karimtraders.com",
+        "order": 3
+      },
+      {
+        "id": "4",
+        "name": "Sultana Duty Free",
+        "logo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "representative": "Nasreen Sultana",
+        "address": "12 Airport Road, Dhaka 1229",
+        "description": "Specializes in airport duty-free retail operations with a focus on premium tobacco and luxury items.",
+        "phone": "+880 2-789012",
+        "email": "info@sultanadutyfree.com",
+        "order": 4
+      },
+      {
+        "id": "5",
+        "name": "Hossain & Co.",
+        "logo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "representative": "Ahmed Hossain",
+        "address": "56 Banani, Dhaka 1213",
+        "description": "Comprehensive import and distribution company serving diplomatic missions and international organizations.",
+        "phone": "+880 2-345678",
+        "email": "info@hossainco.com",
+        "order": 5
+      },
+      {
+        "id": "6",
+        "name": "Begum Imports",
+        "logo": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "representative": "Rashida Begum",
+        "address": "34 Dhanmondi, Dhaka 1205",
+        "description": "Renowned for high-quality imports and exceptional customer service in the diplomatic bond sector.",
+        "phone": "+880 2-901234",
+        "email": "info@begumimports.com",
+        "order": 6
+      }
+    ]
+  },
+  "activities": {
+    "title": "Activities",
+    "subtitle": "Stay updated with our latest events, workshops, and initiatives",
+    "activities": [
+      {
+        "id": "1",
+        "title": "Annual General Meeting 2024",
+        "description": "The Annual General Meeting brought together over 100 member companies to discuss the year's achievements, challenges, and future plans. The event featured keynote speeches, award presentations, and networking sessions.",
+        "date": "2024-12-15",
+        "location": "Dhaka Club, Dhaka",
+        "images": [
+          "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+          "https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+        ],
+        "category": "Meeting",
+        "featured": true
+      },
+      {
+        "id": "2",
+        "title": "Industry Workshop on Compliance",
+        "description": "A comprehensive workshop on regulatory compliance and documentation requirements for duty-free operations, featuring speakers from Bangladesh Customs and Ministry of Commerce.",
+        "date": "2024-11-20",
+        "location": "Hotel Intercontinental, Dhaka",
+        "images": ["https://images.unsplash.com/photo-1556740749-887f6717d7e4"],
+        "category": "Workshop",
+        "featured": true
+      },
+      {
+        "id": "3",
+        "title": "Networking Dinner",
+        "description": "An exclusive networking dinner for executive committee members and senior representatives of member companies.",
+        "date": "2024-10-05",
+        "location": "Pan Pacific Sonargaon, Dhaka",
+        "images": ["https://images.unsplash.com/photo-1556740749-887f6717d7e4"],
+        "category": "Networking",
+        "featured": false
+      },
+      {
+        "id": "4",
+        "title": "Trade Delegation to Singapore",
+        "description": "A delegation of DBDFSOAB members visited Singapore to explore international partnerships and learn from global duty-free best practices.",
+        "date": "2024-09-12",
+        "location": "Singapore",
+        "images": ["https://images.unsplash.com/photo-1556740749-887f6717d7e4"],
+        "category": "Delegation",
+        "featured": true
+      },
+      {
+        "id": "5",
+        "title": "Youth Entrepreneurship Seminar",
+        "description": "A seminar aimed at encouraging young entrepreneurs to enter the diplomatic bond and duty-free sector.",
+        "date": "2024-08-22",
+        "location": "Bangladesh-China Friendship Center, Dhaka",
+        "images": ["https://images.unsplash.com/photo-1556740749-887f6717d7e4"],
+        "category": "Seminar",
+        "featured": false
+      },
+      {
+        "id": "6",
+        "title": "Charity Fundraiser",
+        "description": "Annual charity fundraiser organized by DBDFSOAB to support education for underprivileged children.",
+        "date": "2024-07-15",
+        "location": "Ramna Park, Dhaka",
+        "images": ["https://images.unsplash.com/photo-1556740749-887f6717d7e4"],
+        "category": "CSR",
+        "featured": false
+      }
+    ]
+  },
+  "gallery": {
+    "title": "Gallery",
+    "subtitle": "Moments captured from our events and activities",
+    "categories": [
+      "All",
+      "Events",
+      "Workshops",
+      "Meetings",
+      "Awards",
+      "Delegations"
+    ],
+    "images": [
+      {
+        "id": "1",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Annual General Meeting",
+        "caption": "AGM 2024",
+        "category": "Events",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "id": "2",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Workshop Session",
+        "caption": "Compliance Workshop",
+        "category": "Workshops",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "id": "3",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Award Ceremony",
+        "caption": "Award Night",
+        "category": "Awards",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "id": "4",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Networking Event",
+        "caption": "Networking Dinner",
+        "category": "Events",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "id": "5",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Delegation Meeting",
+        "caption": "Singapore Delegation",
+        "category": "Delegations",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "id": "6",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Annual Meeting",
+        "caption": "Executive Committee Meeting",
+        "category": "Meetings",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "id": "7",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Workshop Training",
+        "caption": "Skills Training",
+        "category": "Workshops",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "id": "8",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Award Presentation",
+        "caption": "Excellence Awards",
+        "category": "Awards",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "id": "9",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Group Photo",
+        "caption": "Committee Group",
+        "category": "Meetings",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "id": "10",
+        "src": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+        "alt": "Charity Event",
+        "caption": "Fundraiser Night",
+        "category": "Events",
+        "width": 800,
+        "height": 600
+      }
+    ]
+  },
+  "documents": {
+    "title": "Documents",
+    "subtitle": "Download official documents, forms, and resources",
+    "documents": [
+      {
+        "id": "1",
+        "title": "Membership Application Form",
+        "description": "Standard membership application form for new companies wishing to join DBDFSOAB.",
+        "fileUrl": "/documents/membership-form.pdf",
+        "fileType": "pdf",
+        "fileSize": "245 KB",
+        "category": "Forms",
+        "icon": "FileText"
+      },
+      {
+        "id": "2",
+        "title": "Annual Report 2023-24",
+        "description": "Comprehensive annual report covering activities, financial statements, and future plans.",
+        "fileUrl": "/documents/annual-report-2023-24.pdf",
+        "fileType": "pdf",
+        "fileSize": "1.2 MB",
+        "category": "Reports",
+        "icon": "FileText"
+      },
+      {
+        "id": "3",
+        "title": "Membership Directory 2024",
+        "description": "Complete directory of all member companies with contact details and key contacts.",
+        "fileUrl": "/documents/directory-2024.pdf",
+        "fileType": "pdf",
+        "fileSize": "890 KB",
+        "category": "Directories",
+        "icon": "FileText"
+      },
+      {
+        "id": "4",
+        "title": "Code of Conduct",
+        "description": "Official code of conduct and ethics guidelines for all DBDFSOAB member companies.",
+        "fileUrl": "/documents/code-of-conduct.pdf",
+        "fileType": "pdf",
+        "fileSize": "156 KB",
+        "category": "Policies",
+        "icon": "FileText"
+      },
+      {
+        "id": "5",
+        "title": "Event Calendar 2024",
+        "description": "Schedule of all upcoming events, workshops, and meetings for the year.",
+        "fileUrl": "/documents/event-calendar-2024.pdf",
+        "fileType": "pdf",
+        "fileSize": "320 KB",
+        "category": "Schedules",
+        "icon": "Calendar"
+      },
+      {
+        "id": "6",
+        "title": "Membership Fee Structure",
+        "description": "Detailed breakdown of membership fees, payment schedules, and benefits.",
+        "fileUrl": "/documents/fee-structure.pdf",
+        "fileType": "pdf",
+        "fileSize": "180 KB",
+        "category": "Financial",
+        "icon": "FileText"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with the Diplomatic Bond and Duty Free Shop Owners Association of Bangladesh",
+    "office": {
+      "name": "DBDFSOAB Head Office",
+      "address": "123 Motijheel C/A",
+      "city": "Dhaka",
+      "country": "Bangladesh",
+      "phone": "+880 2-1234567",
+      "email": "info@dbdfsoab.org",
+      "officeHours": "Sunday - Thursday: 10:00 AM - 6:00 PM"
+    },
+    "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.9026!2d90.4124!3d23.8103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDQxJzA4LjQiTiA5MMKwMTMnMTguMyJF!5e0!3m2!1sen!2sbd!4v1234567890",
+    "social": {
+      "facebook": "https://facebook.com/dbdfsoab",
+      "twitter": "https://twitter.com/dbdfsoab",
+      "linkedin": "https://linkedin.com/company/dbdfsoab",
+      "instagram": "https://instagram.com/dbdfsoab",
+      "youtube": "https://youtube.com/@dbdfsoab",
+      "whatsapp": "https://wa.me/880211234567"
+    }
+  },
+  "footer": {
+    "description": "The Diplomatic Bond and Duty Free Shop Owners Association of Bangladesh (DBDFSOAB) is the premier representative body for diplomatic bond and duty-free shop owners across the nation.",
+    "links": [
+      {
+        "title": "Quick Links",
+        "items": [
+          {
+            "label": "Home",
+            "href": "/"
+          },
+          {
+            "label": "About",
+            "href": "/about"
+          },
+          {
+            "label": "Committee",
+            "href": "/committee"
+          },
+          {
+            "label": "Members",
+            "href": "/members"
+          }
+        ]
+      },
+      {
+        "title": "Resources",
+        "items": [
+          {
+            "label": "Activities",
+            "href": "/activities"
+          },
+          {
+            "label": "Gallery",
+            "href": "/gallery"
+          },
+          {
+            "label": "Documents",
+            "href": "/documents"
+          },
+          {
+            "label": "Contact",
+            "href": "/contact"
+          }
+        ]
+      }
+    ],
+    "copyright": "\u00a9 2024 DBDFSOAB. All rights reserved."
+  },
+  "social": {
+    "facebook": "https://facebook.com/dbdfsoab",
+    "twitter": "https://twitter.com/dbdfsoab",
+    "linkedin": "https://linkedin.com/company/dbdfsoab",
+    "instagram": "https://instagram.com/dbdfsoab",
+    "youtube": "https://youtube.com/@dbdfsoab",
+    "whatsapp": "https://wa.me/880211234567"
+  }
+}
