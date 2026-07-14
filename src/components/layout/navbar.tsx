@@ -58,7 +58,7 @@ export function Navbar({ navLinks, logo, siteName }: NavbarProps) {
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3">
             <img src={logo} alt={siteName} className="h-12 w-auto" />
-            <span className="hidden md:block font-serif text-xl font-bold text-white">
+            <span className="hidden font-serif text-xl font-bold text-white">
               {siteName}
             </span>
           </Link>
