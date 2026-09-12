@@ -9,6 +9,7 @@ import { Members } from "@/pages/Members";
 import { Activities } from "@/pages/Activities";
 import { Gallery } from "@/pages/Gallery";
 import { Documents } from "@/pages/Documents";
+import { Apply } from "@/pages/Apply";
 import { Contact } from "@/pages/Contact";
 import { NotFound } from "@/pages/NotFound";
 import { LoadingScreen } from "@/components/common/loading-screen";
@@ -42,6 +43,7 @@ function AppContent() {
         <Route path="/activities" element={<Activities activities={data.activities} />} />
         <Route path="/gallery" element={<Gallery gallery={data.gallery} />} />
         <Route path="/documents" element={<Documents documents={data.documents} />} />
+        <Route path="/apply" element={<Apply config={data.membershipApplication} />} />
         <Route path="/contact" element={<Contact contact={data.contact} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

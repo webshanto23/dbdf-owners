@@ -76,7 +76,7 @@ export function Navbar({ navLinks, logo, siteName }: NavbarProps) {
 
           <div className="hidden lg:block">
             <Button asChild variant="gold" size="sm">
-              <Link to="/contact">Become a Member</Link>
+              <Link to="/apply">Become a Member</Link>
             </Button>
           </div>
 
@@ -99,7 +99,7 @@ export function Navbar({ navLinks, logo, siteName }: NavbarProps) {
                   />
                 ))}
                 <Button asChild variant="gold" className="mt-4">
-                  <Link to="/contact">Become a Member</Link>
+                  <Link to="/apply">Become a Member</Link>
                 </Button>
               </div>
             </SheetContent>

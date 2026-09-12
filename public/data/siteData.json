@@ -218,8 +218,8 @@
     "cta": {
       "title": "Become a Member",
       "description": "Join DBDFSOAB and unlock a world of opportunities for your business. Network with industry leaders, stay updated on regulations, and grow with us.",
-      "buttonText": "Contact Us",
-      "buttonLink": "/contact"
+      "buttonText": "Apply for Membership",
+      "buttonLink": "/apply"
     },
     "contactPreview": {
       "title": "Get In Touch",
@@ -676,9 +676,9 @@
         "id": "1",
         "title": "Membership Application Form",
         "description": "Standard membership application form for new companies wishing to join DBDFSOAB.",
-        "fileUrl": "/documents/membership-form.pdf",
+        "fileUrl": "/documents/membership-application-form-english.pdf",
         "fileType": "pdf",
-        "fileSize": "245 KB",
+        "fileSize": "168 KB",
         "category": "Forms",
         "icon": "FileText"
       },
@@ -733,6 +733,13 @@
         "icon": "FileText"
       }
     ]
+  },
+  "membershipApplication": {
+    "templateUrl": "/documents/membership-application-form-english.pdf",
+    "recipientEmail": "web.shanto23@gmail.com",
+    "emailSubject": "Membership Application for DBDFSOAB",
+    "emailBody": "Dear DBDFSOAB Authority,\n\nPlease find attached my completed membership application PDF and supporting documents for your review.\n\nRegards,",
+    "supportingDocumentsNote": "Attach the generated PDF and all required supporting documents manually before sending your email."
   },
   "contact": {
     "title": "Contact Us",

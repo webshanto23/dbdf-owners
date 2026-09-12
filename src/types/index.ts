@@ -8,6 +8,7 @@ export interface SiteData {
   activities: ActivitiesPage;
   gallery: GalleryPage;
   documents: DocumentsPage;
+  membershipApplication: MembershipApplicationConfig;
   contact: ContactPage;
   footer: FooterData;
   social: SocialLinks;
@@ -235,6 +236,66 @@ export interface Document {
   fileSize: string;
   category: string;
   icon: string;
+}
+
+export interface MembershipApplicationConfig {
+  templateUrl: string;
+  recipientEmail: string;
+  emailSubject: string;
+  emailBody: string;
+  supportingDocumentsNote: string;
+}
+
+export interface MembershipApplicationFormData {
+  companyName: string;
+  businessAddress: string;
+  ownerName: string;
+  fatherName: string;
+  motherName: string;
+  dateOfBirth: string;
+  nid: string;
+  permanentAddress: string;
+  presentAddress: string;
+  spouseName: string;
+  education: string;
+  ownerMobile: string;
+  nationality: string;
+  religion: string;
+  tradeLicenseNo: string;
+  tradeLicenseDate: string;
+  bondLicenseNo: string;
+  bondLicenseDate: string;
+  licenseType: string;
+  officeAddress: string;
+  companyEmail: string;
+  website: string;
+  bankName: string;
+  accountNo: string;
+  chequeNo: string;
+  paymentDate: string;
+  paymentAmount: string;
+  paymentAmountWords: string;
+  applicationDate: string;
+  representativeName: string;
+  representativeFatherName: string;
+  representativeMotherName: string;
+  representativePermanentAddress: string;
+  representativePresentAddress: string;
+  representativeDateOfBirth: string;
+  representativeMobile: string;
+  representativeSpouseName: string;
+  representativeEducation: string;
+  representativeNationality: string;
+  representativeReligion: string;
+  representativeNid: string;
+  membershipCategory: string;
+  tin: string;
+  certificationDate: string;
+  documentTradeLicense: string;
+  documentBarLicense: string;
+  documentNid: string;
+  documentPhotographs: string;
+  documentTin: string;
 }
 
 export interface ContactPage {
