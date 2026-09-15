@@ -202,7 +202,7 @@ function SecretaryMessage() {
           content="As the General Secretary, I am committed to ensuring that our association operates with transparency, efficiency, and dedication to our members. We are here to serve, advocate, and build a stronger community for all bond and duty-free shop owners in Bangladesh."
           authorName="Fatima Akter"
           authorPosition="General Secretary, DBDFSOAB"
-          authorImage="/images/committee/secretary.jpg"
+          authorImage="/images/emblem.png"
         />
       </div>
     </section>

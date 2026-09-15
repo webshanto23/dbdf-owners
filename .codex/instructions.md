@@ -53,7 +53,7 @@ Never display "Application submitted successfully" merely because the PDF or com
 - [ ] Keep the screen form responsive and readable; only the generated PDF must match the paper layout exactly.
 - [ ] Use typed local React state and existing composition patterns. Avoid new global state libraries or unnecessary abstraction.
 - [ ] Keep unfinished personal data and approved photo/signature inputs in memory by default. Do not silently persist NID, dates of birth, addresses, or signatures to localStorage or transmit them to analytics/services.
-- [ ] Explain that refreshing/leaving loses unfinished input. Preserve values after validation or generation errors so the applicant can correct and retry.
+- [ ] Explain that refreshing/leaving loses unfinished input unless the applicant opts into the three-day device draft. Photo/signature files always need to be selected again after a refresh. Preserve values after validation or generation errors so the applicant can correct and retry.
 - [ ] Use associated labels, keyboard access, understandable errors, and a review step.
 - [ ] Open a preview tab synchronously from the click before asynchronous generation, then navigate it to the PDF Blob URL. Handle popup blocking, generation errors, browser download-only behavior, and URL cleanup.
 - [ ] Provide an explicit download action independent of the browser PDF toolbar.
@@ -95,5 +95,21 @@ Never display "Application submitted successfully" merely because the PDF or com
 - Gmail draft, default email app, and copy-address actions use `membershipApplication.recipientEmail` in `public/data/siteData.json`.
 - The user authorized `web.shanto23@gmail.com` as the temporary recipient. **Before deployment, replace this value with the original authority Gmail address.** No email credentials are needed.
 - Applicants download the PDF, open a prepared draft, manually attach the PDF and supporting documents, and send from their email account. Draft links contain only the recipient and generic subject/body.
-- Form input stays in React memory; the website does not store submissions or confirm receipt. The authority keeps received attachments and manages follow-up in Gmail.
+- Form input stays in React memory by default. Applicants may opt into a three-day localStorage draft of text/checklist answers and the current step; files and PDF bytes are never persisted. The website does not store submissions or confirm receipt. The authority keeps received attachments and manages follow-up in Gmail.
 - This configuration update was reviewed in source. Build/lint, browser email-client checks, real sending, and deployment were not performed.
+
+## Approved stepper and device drafts
+
+The owner approved the `/apply` stepper and three-day localStorage drafts. After auditing the PDF, the corrected five steps are Company / Shop, Representative, Payment, Documents, and Review & PDF. Company / Shop includes all Part 2 items 1–18 in printed order, including the director/proprietor personal particulars. Payment and Documents are explicitly labeled Part 2 continuations; there is no separate Owner Details section. Existing field metadata, PDF coordinates/template, validation rules, and manual email handoff remain authoritative.
+
+- Draft saving is opt-in through “Remember my progress on this device”. Save text/checklist answers and the current step with a versioned record and expiry three days after the last saved change. No image files or generated PDF bytes go into localStorage.
+- Offer Resume draft / Start over before restoring personal data. Clear saved draft disables saving and removes the stored copy while keeping current in-tab answers.
+- Reject invalid/expired drafts; remove expired records when the page is running or next opened. Browsers cannot run cleanup while the website is closed. Handle unavailable/full storage without blocking form completion or claiming the latest answers were saved.
+- Restoring the Review step returns to Documents so optional photo/signature files can be reselected. Preserve other restored steps. Review provides Edit links, and PDF/email actions appear in the final step.
+- Source/diff review only for this implementation; build/lint, browser checks, and end-to-end email checks remain manual. No infrastructure or dependency changes.
+
+- Draft record version 2 uses the corrected five-step positions. Existing version 1 drafts retain all answers and map their six-step positions to the new flow. The PDF fields, coordinates, template, and three-day draft lifetime are unchanged.
+
+Approved page-2 signature uploads: the Documents step accepts optional Authorized Representative's Signature and Authority / Owner's Signature images alongside the existing photo and page-1 applicant signature. Each accepts PNG/JPG up to 2 MB, appears in Review, invalidates any previously generated PDF when changed, and is fitted above its corresponding Part 3 signature line. These are uploaded signature images, not verified digital signatures. All image files remain in memory and must be reselected after refresh; draft storage is unchanged. Page-3 association approvals and the separate page-1 director signature/seal remain blank.
+
+Contact email handoff: `/contact` now receives `membershipApplication.recipientEmail` from App, sharing the configured authority recipient with `/apply`. Required name/email/subject/message fields open a Gmail draft or the configured email app, with visitor name and reply email included in the body. Draft-link encoding is shared in `src/lib/emailDraft.ts`. Input is retained, blocked Gmail windows get a fallback message, and a missing recipient disables draft actions. No automatic sending, delivery confirmation, backend, or contact-data persistence. ContactCard office information remains separately configured. Source and scoped whitespace review completed; no browser/email sending, npm, build, lint, or deployment commands were run.

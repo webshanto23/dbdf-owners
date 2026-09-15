@@ -75,6 +75,10 @@ export const membershipDocumentChecklist: {
 
 // Representative photograph is on page 2. Inset from its printed border.
 export const applicantPhotoPlacement = { pageIndex: 1, x: 472, y: 726, width: 86, height: 94 };
-// This upload is ONLY the applicant signature on page 1. Other signatures stay blank.
+// Applicant signature on page 1; the separate director signature/seal stays blank.
 export const applicantSignaturePlacement = { pageIndex: 0, x: 423, y: 80, width: 130, height: 27 };
 
+// Part 3 signatures on page 2, above their printed lines and labels.
+// These are the applicant company's signatures, not the page-3 association approvals.
+export const representativeSignaturePlacement = { pageIndex: 1, x: 369, y: 364, width: 184, height: 35 };
+export const ownerSignaturePlacement = { pageIndex: 1, x: 412, y: 163, width: 140, height: 35 };

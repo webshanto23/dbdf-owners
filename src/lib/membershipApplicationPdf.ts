@@ -2,6 +2,8 @@ import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf
 import {
   applicantPhotoPlacement,
   applicantSignaturePlacement,
+  representativeSignaturePlacement,
+  ownerSignaturePlacement,
   membershipApplicationTextFields,
   membershipDocumentChecklist,
   type MembershipApplicationTextField,
@@ -11,9 +13,11 @@ import type { MembershipApplicationFormData } from "@/types";
 export type MembershipApplicationImages = {
   applicantPhoto?: File | null;
   signature?: File | null;
+  representativeSignature?: File | null;
+  ownerSignature?: File | null;
 };
 export type MembershipApplicationValidationError = {
-  field: keyof MembershipApplicationFormData | "applicantPhoto" | "signature";
+  field: keyof MembershipApplicationFormData | keyof MembershipApplicationImages;
   message: string;
 };
 export class MembershipApplicationValidationErrors extends Error {
@@ -82,7 +86,12 @@ export async function validateMembershipApplication(
       errors.push({ field: field.key, message: (error as Error).message });
     }
   }
-  for (const [field, file] of [["applicantPhoto", images.applicantPhoto], ["signature", images.signature]] as const) {
+  for (const [field, file] of [
+    ["applicantPhoto", images.applicantPhoto],
+    ["signature", images.signature],
+    ["representativeSignature", images.representativeSignature],
+    ["ownerSignature", images.ownerSignature],
+  ] as const) {
     if (!file) continue;
     if (!["image/jpeg", "image/png"].includes(file.type)) {
       errors.push({ field, message: "Choose a PNG or JPG image." });
@@ -127,6 +136,8 @@ export async function generateMembershipApplicationPdf({
   }
   if (images.applicantPhoto) await drawImageFile(pdf, pages[1], images.applicantPhoto, applicantPhotoPlacement, true);
   if (images.signature) await drawImageFile(pdf, pages[0], images.signature, applicantSignaturePlacement);
+  if (images.representativeSignature) await drawImageFile(pdf, pages[1], images.representativeSignature, representativeSignaturePlacement);
+  if (images.ownerSignature) await drawImageFile(pdf, pages[1], images.ownerSignature, ownerSignaturePlacement);
   return pdf.save();
 }
 

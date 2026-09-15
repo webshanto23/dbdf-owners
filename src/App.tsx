@@ -44,7 +44,7 @@ function AppContent() {
         <Route path="/gallery" element={<Gallery gallery={data.gallery} />} />
         <Route path="/documents" element={<Documents documents={data.documents} />} />
         <Route path="/apply" element={<Apply config={data.membershipApplication} />} />
-        <Route path="/contact" element={<Contact contact={data.contact} />} />
+        <Route path="/contact" element={<Contact contact={data.contact} recipientEmail={data.membershipApplication.recipientEmail} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </MainLayout>

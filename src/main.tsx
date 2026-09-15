@@ -4,15 +4,11 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
 
-function Root() {
-  return (
-    <StrictMode>
-      <BrowserRouter>
-        <App />
-        <div className="grain-overlay" />
-      </BrowserRouter>
-    </StrictMode>
-  )
-}
-
-createRoot(document.getElementById('root')!).render(<Root />)
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+      <div className="grain-overlay" />
+    </BrowserRouter>
+  </StrictMode>
+)

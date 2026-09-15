@@ -1,8 +1,7 @@
+import { buildGmailHref, buildMailtoHref } from "@/lib/emailDraft";
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
-import { motion } from "framer-motion";
 import {
   AlertCircle,
-  CheckCircle2,
   Copy,
   Download,
   ExternalLink,
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useMembershipDraft } from "@/hooks/useMembershipDraft";
 import {
   MembershipApplicationValidationErrors,
   generateMembershipApplicationPdf,
@@ -94,30 +94,27 @@ const initialFormData: MembershipApplicationFormData = {
 
 const fieldGroups: FieldGroup[] = [
   {
-    title: "Company Details",
-    description: "Complete the information applicable to you. Use English/Latin text that fits the original printed blanks.",
-    fields: membershipApplicationTextFields.filter((field) => field.group === "company").map((field) => ({
-      name: field.key, label: field.label, type: field.type,
-    })),
+    title: "Applicant Company/Shop Information",
+    description: "Part 2, items 1–18. Includes the managing director / director / proprietor's personal particulars, as shown in the PDF. Use English/Latin text that fits the printed blanks.",
+    fields: membershipApplicationTextFields
+      .filter((field) => field.group === "company" || field.group === "owner")
+      .map((field) => {
+        // Keep the PDF order and wording; these are not a separate owner section.
+        const label = field.label.replace(/^Owner's /, "");
+        return { name: field.key, label: label.charAt(0).toUpperCase() + label.slice(1), type: field.type };
+      }),
   },
   {
-    title: "Owner Details",
-    description: "Complete the information applicable to you. Use English/Latin text that fits the original printed blanks.",
-    fields: membershipApplicationTextFields.filter((field) => field.group === "owner").map((field) => ({
-      name: field.key, label: field.label, type: field.type,
-    })),
-  },
-  {
-    title: "Payment And Application Date",
-    description: "Complete the information applicable to you. Use English/Latin text that fits the original printed blanks.",
-    fields: membershipApplicationTextFields.filter((field) => field.group === "payment").map((field) => ({
-      name: field.key, label: field.label, type: field.type,
-    })),
-  },
-  {
-    title: "Authorized Representative",
-    description: "Complete the information applicable to you. Use English/Latin text that fits the original printed blanks.",
+    title: "Information of the Authorized Representative of the Owner as a Member of the Association",
+    description: "Part 3. Enter the authorized representative's information and the owner's certification date. These are separate from the personal particulars in Part 2.",
     fields: membershipApplicationTextFields.filter((field) => field.group === "representative").map((field) => ({
+      name: field.key, label: field.label, type: field.type,
+    })),
+  },
+  {
+    title: "Registration Fee Details — Part 2",
+    description: "Continuation of Applicant Company/Shop Information: item 19 (cheque / pay order details) and the applicant's signature date at the bottom of page 1.",
+    fields: membershipApplicationTextFields.filter((field) => field.group === "payment").map((field) => ({
       name: field.key, label: field.label, type: field.type,
     })),
   },
@@ -127,8 +124,15 @@ export function Apply({ config }: ApplyProps) {
   const [values, setValues] = useState(initialFormData);
   const [applicantPhoto, setApplicantPhoto] = useState<File | null>(null);
   const [signature, setSignature] = useState<File | null>(null);
+  const [representativeSignature, setRepresentativeSignature] = useState<File | null>(null);
+  const [ownerSignature, setOwnerSignature] = useState<File | null>(null);
   const [errors, setErrors] = useState<MembershipApplicationValidationError[]>([]);
-  const [isReviewing, setIsReviewing] = useState(false);
+  const [step, setStep] = useState(0);
+  const [furthestStep, setFurthestStep] = useState(0);
+  const [isValidating, setIsValidating] = useState(false);
+  const draft = useMembershipDraft(values, step);
+  const stepHeading = useRef<HTMLHeadingElement>(null);
+  const focusError = useRef(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedUrl, setGeneratedUrl] = useState("");
   const [generationMessage, setGenerationMessage] = useState("");
@@ -137,6 +141,7 @@ export function Apply({ config }: ApplyProps) {
   const generationInProgress = useRef(false);
   const mounted = useRef(true);
 
+  const isBusy = isGenerating || isValidating;
   const recipientEmail = config.recipientEmail.trim();
   const pdfReady = generatedUrl.length > 0;
   const filename = useMemo(() => {
@@ -154,7 +159,7 @@ export function Apply({ config }: ApplyProps) {
     };
   }, []);
 
-  const images: MembershipApplicationImages = { applicantPhoto, signature };
+  const images: MembershipApplicationImages = { applicantPhoto, signature, representativeSignature, ownerSignature };
   const gmailHref = buildGmailHref(recipientEmail, config.emailSubject, config.emailBody);
   const mailtoHref = buildMailtoHref(recipientEmail, config.emailSubject, config.emailBody);
 
@@ -173,36 +178,84 @@ export function Apply({ config }: ApplyProps) {
 
   function handleFieldChange(name: keyof MembershipApplicationFormData, value: string) {
     formRevision.current += 1;
-    setIsReviewing(false);
     setValues((current) => ({ ...current, [name]: value }));
     setErrors((current) => current.filter((error) => error.field !== name));
     clearGeneratedPdf();
   }
 
-  function handleFileChange(event: ChangeEvent<HTMLInputElement>, field: "applicantPhoto" | "signature") {
+  function handleFileChange(event: ChangeEvent<HTMLInputElement>, field: keyof MembershipApplicationImages) {
     formRevision.current += 1;
-    setIsReviewing(false);
     const file = event.target.files?.[0] ?? null;
     if (field === "applicantPhoto") {
       setApplicantPhoto(file);
-    } else {
+    } else if (field === "signature") {
       setSignature(file);
+    } else if (field === "representativeSignature") {
+      setRepresentativeSignature(file);
+    } else {
+      setOwnerSignature(file);
     }
     setErrors((current) => current.filter((error) => error.field !== field));
     clearGeneratedPdf();
   }
 
-  async function handleReview() {
-    const revision = formRevision.current;
-    try {
-      const nextErrors = await validateMembershipApplication(values, images);
-      if (!mounted.current || revision !== formRevision.current) return;
-      setErrors(nextErrors);
-      setIsReviewing(nextErrors.length === 0);
-      setGenerationMessage(nextErrors.length ? "Please correct the highlighted fields." : "");
-    } catch {
-      if (mounted.current) setGenerationMessage("Unable to validate the application. Please try again.");
+  useEffect(() => {
+    stepHeading.current?.focus({ preventScroll: true });
+    stepHeading.current?.scrollIntoView({ block: "start", behavior: "instant" });
+  }, [step]);
+
+  useEffect(() => {
+    if (!focusError.current) return;
+    const first = errors.find((error) => stepForField(error.field) === step);
+    if (first) {
+      document.getElementById(first.field)?.focus();
+      focusError.current = false;
     }
+  }, [errors, step]);
+
+  function goToStep(next: number) {
+    setStep(next);
+    setGenerationMessage("");
+  }
+
+  async function continueTo(next: number) {
+    if (isBusy) return;
+    if (next <= step) {
+      goToStep(next);
+      return;
+    }
+    const revision = formRevision.current;
+    setIsValidating(true);
+    try {
+      const allErrors = await validateMembershipApplication(values, images);
+      if (!mounted.current || revision !== formRevision.current) return;
+      const nextErrors = next === reviewStep ? allErrors : allErrors.filter((error) => stepForField(error.field) === step);
+      focusError.current = nextErrors.length > 0;
+      setErrors(nextErrors);
+      if (nextErrors.length) {
+        setStep(stepForField(nextErrors[0].field));
+        setGenerationMessage("Please correct the highlighted fields before continuing.");
+        return;
+      }
+      setFurthestStep((current) => Math.max(current, next));
+      goToStep(next);
+    } catch {
+      if (mounted.current) setGenerationMessage("Unable to check your answers. Please try again.");
+    } finally {
+      if (mounted.current) setIsValidating(false);
+    }
+  }
+
+  function resumeDraft() {
+    const saved = draft.resume();
+    if (!saved) return;
+    formRevision.current += 1;
+    setValues(saved.values);
+    // Files are deliberately not stored; revisit Documents before the final review.
+    const restoredStep = Math.min(saved.step, documentsStep);
+    setStep(restoredStep);
+    setFurthestStep(restoredStep);
+    setGenerationMessage("Draft restored. Please select your photo and signatures again in Documents, if applicable.");
   }
 
   async function handleGeneratePdf() {
@@ -230,14 +283,16 @@ export function Apply({ config }: ApplyProps) {
       generatedUrlRef.current = nextUrl;
       setGeneratedUrl(nextUrl);
       setErrors([]);
-      setIsReviewing(true);
       setGenerationMessage(previewWindow && !previewWindow.closed ? "" : "Preview unavailable. Use Download PDF to save the completed application.");
       if (previewWindow && !previewWindow.closed) previewWindow.location.href = nextUrl;
     } catch (error) {
       previewWindow?.close();
       if (!mounted.current || revision !== formRevision.current) return;
-      if (error instanceof MembershipApplicationValidationErrors) setErrors(error.errors);
-      setIsReviewing(false);
+      if (error instanceof MembershipApplicationValidationErrors) {
+        focusError.current = error.errors.length > 0;
+        setErrors(error.errors);
+        if (error.errors.length) setStep(stepForField(error.errors[0].field));
+      }
       setGenerationMessage(error instanceof Error ? error.message : "Unable to generate the PDF. Please try again.");
     } finally {
       generationInProgress.current = false;
@@ -256,110 +311,103 @@ export function Apply({ config }: ApplyProps) {
   }
 
   return (
-    <main>
-      <PageBanner />
-      <section className="py-24 bg-bg-primary relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-gold/5 via-transparent to-transparent" />
-        <div className="container-custom relative">
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_360px] gap-8 items-start">
-            <fieldset disabled={isGenerating} className="min-w-0 space-y-8">
-              <IntroPanel templateUrl={config.templateUrl} />
-              {fieldGroups.map((group) => (
-                <FormGroup
-                  key={group.title}
-                  group={group}
-                  values={values}
-                  errors={errors}
-                  onFieldChange={handleFieldChange}
-                />
-              ))}
-              <DocumentChecklist values={values} onFieldChange={handleFieldChange} />
-              <UploadPanel
-                applicantPhoto={applicantPhoto}
-                signature={signature}
-                errors={errors}
-                onFileChange={handleFileChange}
-              />
-            </fieldset>
-
-            <aside className="lg:sticky lg:top-28 space-y-6">
-              <ActionPanel
-                isReviewing={isReviewing}
-                isGenerating={isGenerating}
-                pdfReady={pdfReady}
-                generatedUrl={generatedUrl}
-                filename={filename}
-                generationMessage={generationMessage}
-                recipientEmail={recipientEmail}
-                gmailHref={gmailHref}
-                mailtoHref={mailtoHref}
-                supportingDocumentsNote={config.supportingDocumentsNote}
-                onReview={handleReview}
-                onGeneratePdf={handleGeneratePdf}
-                onCopyEmail={handleCopyEmail}
-              />
-              {isReviewing && <ReviewPanel values={values} applicantPhoto={applicantPhoto} signature={signature} />}
-            </aside>
-          </div>
-        </div>
+    <div className="bg-bg-primary text-text-primary pt-20">
+      <section className="container-custom pt-12 pb-8">
+        <h1 className="font-serif text-3xl md:text-5xl font-bold mb-4">Membership Application</h1>
+        <p className="text-text-muted">Complete your details, then download and email your application.</p>
       </section>
-    </main>
-  );
-}
-
-function PageBanner() {
-  return (
-    <section className="relative py-20 md:py-28 bg-bg-primary text-white overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-bg-primary via-bg-surface to-bg-primary" />
-      <div className="absolute inset-0 bg-gradient-to-br from-accent-gold/10 via-transparent to-transparent" />
-      <div className="relative z-10 container-custom text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight"
-        >
-          Membership Application
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-text-muted text-lg md:text-xl max-w-2xl mx-auto"
-        >
-          Fill the application details, generate the completed application PDF locally, then attach it to your email manually.
-        </motion.p>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-bg-primary to-transparent" />
-    </section>
-  );
-}
-
-function IntroPanel({ templateUrl }: { templateUrl: string }) {
-  return (
-    <div className="rounded-3xl border border-accent-gold/10 bg-bg-surface p-6 md:p-8">
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-xl bg-bg-primary border border-accent-gold/10 flex items-center justify-center shrink-0">
-          <FileText className="h-6 w-6 text-accent-gold" />
-        </div>
-        <div>
-          <h2 className="font-serif text-2xl font-bold text-text-primary mb-3">Browser-only PDF completion</h2>
-          <p className="text-text-muted leading-relaxed">
-            Your information stays in this browser tab. Refreshing or leaving loses unfinished input. Fill applicable fields using English/Latin characters. Office approval sections remain blank; complete the other signature and seal spaces after printing.
-          </p>
-          <Button
-            asChild
-            variant="outline"
-            className="mt-5 border-accent-gold/30 text-accent-gold hover:bg-accent-gold/10 hover:border-accent-gold"
-          >
-            <a href={templateUrl} target="_blank" rel="noopener noreferrer">
-              View blank template
-              <ExternalLink className="h-4 w-4" />
-            </a>
-          </Button>
-        </div>
-      </div>
+      <section className="container-custom pb-20">
+        {!draft.ready ? (
+          <p role="status" className="text-text-muted">Checking for a saved draft…</p>
+        ) : draft.pending ? (
+          <div className="rounded-3xl border border-accent-gold/20 bg-bg-surface p-6 md:p-8 max-w-2xl">
+            <h2 className="font-serif text-2xl font-bold mb-3">Continue your application?</h2>
+            <p className="text-text-muted mb-6">A draft is saved on this device until {new Date(draft.pending.expiresAt).toLocaleString()}. Photo and signature files will need to be selected again.</p>
+            <div className="flex flex-wrap gap-3">
+              <Button variant="gold" onClick={resumeDraft}>Resume draft</Button>
+              <Button variant="outline" className={outlineButton} onClick={draft.clear}>Start over</Button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid lg:grid-cols-[240px_minmax(0,1fr)] gap-8 items-start">
+            <aside className="lg:sticky lg:top-28 rounded-3xl border border-accent-gold/20 bg-bg-surface p-6">
+              <h2 className="font-serif text-xl font-bold mb-5">Your application</h2>
+              <p className="lg:hidden text-accent-gold text-sm mb-3">Step {step + 1} of {stepLabels.length} · {stepLabels[step]}</p>
+              <progress className="lg:hidden w-full h-2 mb-4 accent-accent-gold" aria-label="Application progress" value={step + 1} max={stepLabels.length} />
+              <nav aria-label="Application steps" className="hidden lg:block">
+                <ol className="space-y-3">
+                  {stepLabels.map((label, index) => (
+                    <li key={label}>
+                      <button type="button" disabled={isBusy || index > furthestStep} aria-current={index === step ? "step" : undefined}
+                        onClick={() => void continueTo(index)}
+                        className={`w-full flex items-center gap-3 text-left py-2 rounded-lg focus-visible:outline-2 focus-visible:outline-accent-gold disabled:opacity-50 ${index === step ? "text-accent-gold font-medium" : "text-text-muted"}`}>
+                        <span className={`h-8 w-8 shrink-0 rounded-full border flex items-center justify-center ${index === step ? "bg-accent-gold border-accent-gold text-bg-primary" : "border-accent-gold/30"}`}>{index + 1}</span>
+                        {label}
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+              <div className="lg:mt-6 lg:pt-6 lg:border-t border-accent-gold/15 space-y-3">
+                <label className="flex items-start gap-3 text-sm">
+                  <input type="checkbox" checked={draft.enabled} disabled={isBusy} onChange={(event) => draft.toggle(event.target.checked)} className="mt-1 accent-accent-gold" />
+                  Remember my progress on this device
+                </label>
+                <p className="text-xs text-text-muted">Includes personal details. Use only on a private device. Drafts expire after 3 days without changes. Photos and signatures are not saved.</p>
+                <p role="status" className="text-sm text-text-muted">{draft.message || "Without a saved draft, refreshing or leaving clears your answers."}</p>
+                {draft.enabled && <Button type="button" variant="link" className="text-accent-gold px-0" disabled={isBusy} onClick={draft.clear}>Clear saved draft</Button>}
+              </div>
+            </aside>
+            <div className="min-w-0">
+              <h2 ref={stepHeading} tabIndex={-1} className="text-accent-gold text-sm font-medium mb-4 scroll-mt-28 outline-none">Step {step + 1} of {stepLabels.length} · {stepLabels[step]}</h2>
+              <form noValidate onSubmit={(event) => { event.preventDefault(); if (step < reviewStep) void continueTo(step + 1); }}>
+                <fieldset disabled={isBusy} className="min-w-0 space-y-6" aria-busy={isBusy}>
+                  {step < documentsStep && <FormGroup group={orderedGroups[step]} values={values} errors={errors} onFieldChange={handleFieldChange} />}
+                  {step === documentsStep && <>
+                    <DocumentChecklist values={values} onFieldChange={handleFieldChange} />
+                    <UploadPanel applicantPhoto={applicantPhoto} signature={signature} representativeSignature={representativeSignature} ownerSignature={ownerSignature} errors={errors} onFileChange={handleFileChange} />
+                    <p className="text-sm text-text-muted">Photo and signature files stay in this tab only. After resuming a draft, select them again if applicable. Other signature and seal spaces can be completed after printing.</p>
+                  </>}
+                  {step === reviewStep && <>
+                    <ReviewPanel values={values} applicantPhoto={applicantPhoto} signature={signature} representativeSignature={representativeSignature} ownerSignature={ownerSignature} onEdit={goToStep} />
+                    <ActionPanel isGenerating={isGenerating} pdfReady={pdfReady} generatedUrl={generatedUrl} filename={filename}
+                      recipientEmail={recipientEmail} gmailHref={gmailHref} mailtoHref={mailtoHref}
+                      supportingDocumentsNote={config.supportingDocumentsNote} onGeneratePdf={handleGeneratePdf} onCopyEmail={handleCopyEmail} />
+                  </>}
+                  {generationMessage && <p role="status" className="text-sm text-text-muted flex gap-2"><AlertCircle className="h-4 w-4 shrink-0 text-accent-gold" />{generationMessage}</p>}
+                  {errors.some((error) => stepForField(error.field) === step) && <div role="alert" className="rounded-xl border border-accent-gold/20 p-4">
+                    <p className="font-medium mb-2">Please check these answers:</p>
+                    <ul className="space-y-2 text-sm text-text-muted">
+                      {errors.filter((error) => stepForField(error.field) === step).map((error) => <li key={error.field}><a href={`#${error.field}`} className="underline">{error.message}</a></li>)}
+                    </ul>
+                  </div>}
+                  <div className="flex flex-wrap items-center justify-between gap-4 border-t border-accent-gold/15 pt-6">
+                    <div className="flex items-center gap-4">
+                      {step > 0 && <Button type="button" variant="outline" className={outlineButton} onClick={() => goToStep(step - 1)}>Back</Button>}
+                      <a href={config.templateUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-accent-gold underline">View blank PDF</a>
+                    </div>
+                    {step < reviewStep && <Button type="submit" variant="gold" size="lg">{isValidating ? "Checking…" : step === documentsStep ? "Review application" : `Continue to ${stepLabels[step + 1]}`}</Button>}
+                  </div>
+                </fieldset>
+              </form>
+              <p className="mt-4 text-sm text-text-muted">You can go back to edit your answers before generating the PDF. Generating a PDF does not submit your application.</p>
+            </div>
+          </div>
+        )}
+      </section>
     </div>
   );
+}
+
+const stepLabels = ["Company / Shop", "Representative", "Payment", "Documents", "Review & PDF"];
+const orderedGroups = fieldGroups;
+const documentsStep = orderedGroups.length;
+const reviewStep = stepLabels.length - 1;
+const outlineButton = "border-accent-gold/30 text-accent-gold hover:bg-accent-gold/10 hover:border-accent-gold";
+
+function stepForField(field: MembershipApplicationValidationError["field"]) {
+  const index = orderedGroups.findIndex((group) => group.fields.some((item) => item.name === field));
+  return index < 0 ? documentsStep : index;
 }
 
 function FormGroup({
@@ -383,10 +431,12 @@ function FormGroup({
         {group.fields.map((field) => {
           const error = errors.find((item) => item.field === field.name);
           return (
-            <label key={field.name} className={field.multiline ? "md:col-span-2" : ""}>
+            <label key={field.name} className={field.multiline || /address|companyName/i.test(field.name) ? "md:col-span-2" : ""}>
               <span className="block text-sm font-medium text-text-primary mb-2">{field.label}</span>
               {field.multiline ? (
                 <textarea
+                  id={field.name}
+                  aria-describedby={error ? `${field.name}-error` : undefined}
                   rows={3}
                   value={values[field.name]}
                   onChange={(event) => onFieldChange(field.name, event.target.value)}
@@ -396,7 +446,10 @@ function FormGroup({
                 />
               ) : (
                 <Input
+                  id={field.name}
+                  aria-describedby={error ? `${field.name}-error` : undefined}
                   type={field.type ?? "text"}
+                  style={field.type === "date" ? { colorScheme: "dark" } : undefined}
                   value={values[field.name]}
                   onChange={(event) => onFieldChange(field.name, event.target.value)}
                   placeholder={field.placeholder}
@@ -404,7 +457,7 @@ function FormGroup({
                   aria-invalid={Boolean(error)}
                 />
               )}
-              {error && <span className="block text-sm text-red-300 mt-2">{error.message}</span>}
+              {error && <span id={`${field.name}-error`} className="block text-sm text-red-300 mt-2">{error.message}</span>}
             </label>
           );
         })}
@@ -416,19 +469,23 @@ function FormGroup({
 function UploadPanel({
   applicantPhoto,
   signature,
+  representativeSignature,
+  ownerSignature,
   errors,
   onFileChange,
 }: {
   applicantPhoto: File | null;
   signature: File | null;
+  representativeSignature: File | null;
+  ownerSignature: File | null;
   errors: MembershipApplicationValidationError[];
-  onFileChange: (event: ChangeEvent<HTMLInputElement>, field: "applicantPhoto" | "signature") => void;
+  onFileChange: (event: ChangeEvent<HTMLInputElement>, field: keyof MembershipApplicationImages) => void;
 }) {
   return (
     <section className="rounded-3xl border border-accent-gold/10 bg-bg-surface p-6 md:p-8">
       <div className="mb-8">
-        <h2 className="font-serif text-2xl font-bold text-text-primary mb-2">Images</h2>
-        <p className="text-text-muted">Optional PNG or JPG files, each smaller than 2 MB.</p>
+        <h2 className="font-serif text-2xl font-bold text-text-primary mb-2">Photograph and Signatures</h2>
+        <p className="text-text-muted">Optional PNG or JPG files, each 2 MB or smaller. The applicant signature belongs to Part 2. The representative photograph and both page-2 signatures belong to Part 3.</p>
       </div>
       <div className="grid md:grid-cols-2 gap-6">
         <FileInput
@@ -444,6 +501,20 @@ function UploadPanel({
           file={signature}
           error={errors.find((item) => item.field === "signature")?.message}
           onChange={(event) => onFileChange(event, "signature")}
+        />
+        <FileInput
+          id="representativeSignature"
+          label="Authorized Representative's Signature (page 2)"
+          file={representativeSignature}
+          error={errors.find((item) => item.field === "representativeSignature")?.message}
+          onChange={(event) => onFileChange(event, "representativeSignature")}
+        />
+        <FileInput
+          id="ownerSignature"
+          label="Authority / Owner's Signature (page 2)"
+          file={ownerSignature}
+          error={errors.find((item) => item.field === "ownerSignature")?.message}
+          onChange={(event) => onFileChange(event, "ownerSignature")}
         />
       </div>
     </section>
@@ -470,38 +541,32 @@ function FileInput({
         {label}
       </span>
       <span className="block text-sm text-text-muted mb-4">{file ? file.name : "Choose a PNG or JPG file"}</span>
-      <input id={id} type="file" accept="image/png,image/jpeg" onChange={onChange} className="sr-only" />
-      {error && <span className="block text-sm text-red-300">{error}</span>}
+      <input id={id} type="file" accept="image/png,image/jpeg" onChange={onChange} className="block w-full text-sm text-text-muted file:mr-3 file:rounded-md file:border-0 file:bg-accent-gold file:px-3 file:py-2 file:text-bg-primary" aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined} />
+      {error && <span id={`${id}-error`} className="block text-sm text-red-300">{error}</span>}
     </label>
   );
 }
 
 function ActionPanel({
-  isReviewing,
   isGenerating,
   pdfReady,
   generatedUrl,
   filename,
-  generationMessage,
   recipientEmail,
   gmailHref,
   mailtoHref,
   supportingDocumentsNote,
-  onReview,
   onGeneratePdf,
   onCopyEmail,
 }: {
-  isReviewing: boolean;
   isGenerating: boolean;
   pdfReady: boolean;
   generatedUrl: string;
   filename: string;
-  generationMessage: string;
   recipientEmail: string;
   gmailHref: string;
   mailtoHref: string;
   supportingDocumentsNote: string;
-  onReview: () => void;
   onGeneratePdf: () => void;
   onCopyEmail: () => void;
 }) {
@@ -509,10 +574,6 @@ function ActionPanel({
     <div className="rounded-3xl border border-accent-gold/10 bg-bg-surface p-6">
       <h2 className="font-serif text-2xl font-bold text-text-primary mb-4">Generate And Send</h2>
       <div className="space-y-3">
-        <Button type="button" variant="outline" size="lg" className="w-full border-accent-gold/30 text-accent-gold hover:bg-accent-gold/10 hover:border-accent-gold" onClick={onReview} disabled={isGenerating}>
-          <CheckCircle2 className="h-4 w-4" />
-          Review Information
-        </Button>
         <Button type="button" variant="gold" size="lg" className="w-full" onClick={onGeneratePdf} disabled={isGenerating}>
           <FileText className="h-4 w-4" />
           {isGenerating ? "Generating PDF..." : "Generate PDF"}
@@ -526,17 +587,6 @@ function ActionPanel({
           </Button>
         )}
       </div>
-
-      {isReviewing && !pdfReady && (
-        <p className="mt-4 text-sm text-text-muted">Review is ready. Generate the PDF when the information looks correct.</p>
-      )}
-
-      {generationMessage && (
-        <p className="mt-4 text-sm text-text-muted flex gap-2">
-          <AlertCircle className="h-4 w-4 text-accent-gold shrink-0 mt-0.5" />
-          {generationMessage}
-        </p>
-      )}
 
       {pdfReady && (
         <div className="mt-6 rounded-2xl border border-accent-gold/15 bg-bg-primary p-4">
@@ -555,13 +605,13 @@ function ActionPanel({
         </div>
       )}
 
-      {recipientEmail && (
+      {pdfReady && recipientEmail && (
         <p className="mt-6 text-sm text-text-muted break-words">
           Send your application to: <span className="text-text-primary">{recipientEmail}</span>
         </p>
       )}
 
-      <div className="mt-6 space-y-3">
+      {pdfReady && <div className="mt-6 space-y-3">
         <Button asChild variant="gold" size="lg" className="w-full aria-disabled:pointer-events-none aria-disabled:opacity-50" aria-disabled={!recipientEmail || !pdfReady}>
           <a href={recipientEmail && pdfReady ? gmailHref : undefined} target="_blank" rel="noopener noreferrer">
             <Mail className="h-4 w-4" />
@@ -578,7 +628,7 @@ function ActionPanel({
           <Copy className="h-4 w-4" />
           Copy authority email address
         </Button>
-      </div>
+      </div>}
 
       {!recipientEmail && (
         <p className="mt-4 text-sm text-text-muted">
@@ -589,29 +639,43 @@ function ActionPanel({
   );
 }
 
-function ReviewPanel({
-  values,
-  applicantPhoto,
-  signature,
-}: {
+function ReviewPanel({ values, applicantPhoto, signature, representativeSignature, ownerSignature, onEdit }: {
   values: MembershipApplicationFormData;
   applicantPhoto: File | null;
   signature: File | null;
+  representativeSignature: File | null;
+  ownerSignature: File | null;
+  onEdit: (step: number) => void;
 }) {
   return (
-    <div className="rounded-3xl border border-accent-gold/10 bg-bg-surface p-6">
-      <h2 className="font-serif text-xl font-bold text-text-primary mb-3">Review Your Answers</h2>
-      <dl className="space-y-3 text-sm">
-        {[...membershipApplicationTextFields, ...membershipDocumentChecklist].map((field) => (
-          <div key={field.key}>
-            <dt className="text-text-muted">{field.label}</dt>
-            <dd className="text-text-primary break-words">{values[field.key] || "Not provided"}</dd>
+    <section className="rounded-3xl border border-accent-gold/10 bg-bg-surface p-6 md:p-8">
+      <h2 className="font-serif text-2xl font-bold mb-3">Review your application</h2>
+      <p className="text-text-muted mb-6">Check your answers before generating the PDF. Office approval sections stay blank.</p>
+      {orderedGroups.map((group, index) => (
+        <div key={group.title} className="border-t border-accent-gold/15 py-5">
+          <div className="flex items-center justify-between gap-4 mb-3">
+            <h3 className="font-serif text-lg font-bold">{group.title}</h3>
+            <Button type="button" variant="link" className="text-accent-gold" onClick={() => onEdit(index)} aria-label={`Edit ${group.title}`}>Edit</Button>
           </div>
-        ))}
-      </dl>
-      <p className="mt-4 text-sm text-text-muted">Representative photo: {applicantPhoto ? applicantPhoto.name : "Not uploaded"}</p>
-      <p className="mt-2 text-sm text-text-muted">Applicant signature: {signature ? signature.name : "Not uploaded"}</p>
-    </div>
+          <dl className="grid md:grid-cols-2 gap-4 text-sm">
+            {group.fields.map((field) => <div key={field.name}><dt className="text-text-muted">{field.label}</dt><dd className="break-words">{values[field.name] || "Not provided"}</dd></div>)}
+          </dl>
+        </div>
+      ))}
+      <div className="border-t border-accent-gold/15 pt-5">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-serif text-lg font-bold">Supporting documents (Part 2) and images</h3>
+          <Button type="button" variant="link" className="text-accent-gold" onClick={() => onEdit(documentsStep)} aria-label="Edit documents and images">Edit</Button>
+        </div>
+        <ul className="text-sm text-text-muted space-y-2">
+          {membershipDocumentChecklist.map((item) => <li key={item.key}>{item.label}: {values[item.key] === "Yes" ? "Will attach to email" : "Not selected"}</li>)}
+          <li>Representative photo: {applicantPhoto?.name ?? "Not selected"}</li>
+          <li>Applicant signature: {signature?.name ?? "Not selected"}</li>
+          <li>Authorized Representative's Signature: {representativeSignature?.name ?? "Not selected"}</li>
+          <li>Authority / Owner's Signature: {ownerSignature?.name ?? "Not selected"}</li>
+        </ul>
+      </div>
+    </section>
   );
 }
 
@@ -621,8 +685,8 @@ function DocumentChecklist({ values, onFieldChange }: {
 }) {
   return (
     <section className="rounded-3xl border border-accent-gold/10 bg-bg-surface p-6 md:p-8">
-      <h2 className="font-serif text-2xl font-bold text-text-primary mb-3">Supporting Documents</h2>
-      <p className="text-text-muted mb-6">Select the documents you will include. Attach them to your email separately; they are not uploaded here.</p>
+      <h2 className="font-serif text-2xl font-bold text-text-primary mb-3">Supporting Documents — Part 2</h2>
+      <p className="text-text-muted mb-6">Continuation of Applicant Company/Shop Information: item 20. Select the documents you will include. Attach them to your email separately; they are not uploaded here.</p>
       <div className="space-y-3">
         {membershipDocumentChecklist.map((item) => (
           <label key={item.key} className="flex items-center gap-3 text-text-primary">
@@ -633,20 +697,4 @@ function DocumentChecklist({ values, onFieldChange }: {
       </div>
     </section>
   );
-}
-
-function buildGmailHref(recipient: string, subject: string, body: string) {
-  const params = new URLSearchParams({
-    view: "cm",
-    fs: "1",
-    to: recipient,
-    su: subject,
-    body,
-  });
-  return `https://mail.google.com/mail/?${params.toString()}`;
-}
-
-function buildMailtoHref(recipient: string, subject: string, body: string) {
-  const normalizedBody = body.replace(/\r?\n/g, "\r\n");
-  return `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(normalizedBody)}`;
 }

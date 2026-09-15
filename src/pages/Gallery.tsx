@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ export function Gallery({ gallery }: GalleryProps) {
   const [selectedImage, setSelectedImage] = useState<typeof gallery.images[0] | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const filtered = selectedCategory === "All" ? gallery.images : gallery.images.filter((img) => img.category === selectedCategory);
+  const filtered = useMemo(() => selectedCategory === "All" ? gallery.images : gallery.images.filter((img) => img.category === selectedCategory), [selectedCategory, gallery.images]);
 
   const openLightbox = (index: number) => {
     setCurrentIndex(index);
@@ -27,17 +27,17 @@ export function Gallery({ gallery }: GalleryProps) {
     setSelectedImage(null);
   };
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     const next = (currentIndex + 1) % filtered.length;
     setCurrentIndex(next);
     setSelectedImage(filtered[next]);
-  };
+  }, [currentIndex, filtered]);
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     const prev = (currentIndex - 1 + filtered.length) % filtered.length;
     setCurrentIndex(prev);
     setSelectedImage(filtered[prev]);
-  };
+  }, [currentIndex, filtered]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -48,7 +48,7 @@ export function Gallery({ gallery }: GalleryProps) {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedImage, currentIndex]);
+  }, [selectedImage, nextImage, prevImage]);
 
   return (
     <main>
